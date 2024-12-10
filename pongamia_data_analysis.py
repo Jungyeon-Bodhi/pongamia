@@ -26,6 +26,7 @@ from statsmodels.stats.diagnostic import lilliefors
 import statsmodels.api as sm
 from scipy import stats
 from scipy.stats import f_oneway
+from itertools import cycle
 from statsmodels.formula.api import ols
 
 warnings.filterwarnings("ignore")
@@ -516,7 +517,7 @@ class Data_analysis:
         plt.ylabel(indicator.i_type, fontsize = fontsize)
         ax.set_xticks(range(len(labels)))
         ax.set_xticklabels(labels, rotation=rotation, fontsize=fontsize)
-        bar_handles = [Patch(color=palette[i], label=label) for i, label in enumerate(labels)]
+        bar_handles = [Patch(color=color, label=label) for color, label in zip(cycle(palette), labels)]
         line_handles, _ = ax.get_legend_handles_labels()
         handles = bar_handles + line_handles[:-1]
         ax.legend(handles=handles, title="Category", loc='best')

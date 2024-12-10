@@ -65,11 +65,11 @@ def create_indicators_wash(df):
     output122.add_var_order(['Not improved', 'Improved'])
     indicators.append(output122)
     
-    output215 = bd.Indicator(df, "output215", 215, ['output_215'], i_cal=None, i_type='percentage', description='Number of displacement affected persons who report increased capacity to meet basic needs', period='endline', target = None)
-    output215.add_baseline(24.5)
-    output215.add_breakdown({'4':'Country'})
-    output215.add_var_order(['Not increased', 'Increased'])
-    indicators.append(output215)
+    outcome1 = bd.Indicator(df, "outcome1.1", 1, ['outcome_1_1'], i_cal=None, i_type='percentage', description='Number of assisted displacement-affected persons who gained or improved access to integrated basic services ', period='endline', target = None)
+    outcome1.add_baseline(24.5)
+    outcome1.add_breakdown({'4':'Country'})
+    outcome1.add_var_order(['Not increased', 'Increased'])
+    indicators.append(outcome1)
     
     important_wash = bd.Indicator(df, "Washing important", None, ["83-1", "83-2", "83-3","83-4", "83-5", "83-6"], i_cal=None, i_type='percentage', description="Can you please tell me the five critical times when it is most important to wash one's hand?", period='endline', target = None)
     important_wash.add_breakdown({'4':'Country'})
@@ -193,6 +193,25 @@ def create_indicators_livelihood(df):
     food_s7.add_breakdown({'3':'Gender', '2':'Age group', '4':'Country', 'state':'State','7':'Residency status', 'Disability':'Disability'})
     food_s7.add_var_order(['Very low', "Low", "Moderate","High","Very high"])
     indicators.append(food_s7)
+    
+    crim = bd.Indicator(df, "crim", None, ['33-1', '33-2', '33-3', '33-4', '33-5', '33-6', '33-7', '33-8', '33-9'], i_cal=None, i_type='count', description='Has your household experienced or been fearful of any of these things in the last three months?', period='endline', target = None)
+    crim.add_var_change({1: "Yes", 0: "No"})
+    crim.add_var_order([1, 0])
+    crim.add_label(["Community or country level conflict (includes presence of gangs and other criminal activity)", 
+                    "Discrimination (xenophobia, homophobia, religious exclusion, gender)", 
+                    "Harassment/threats/violence (all types, including against women and/or children) from individuals or groups or authorities (or within the household) COVID-19 or other infectious diseases",
+                    "Arrest or deportation (e.g. due to lack of legal status or documentation or work authorization)", 
+                    "Kidnapping", 
+                    "Theft or robbery", 
+                    "Unsafe housing or eviction (shelter quality or location)", 
+                    "Other"
+                     , "None of them"])
+    indicators.append(crim)
+    
+    os_p = bd.Indicator(df, "overall satisfaction", None, ['141'], i_cal=None, i_type='count', description="To what extent are you satisfied with the ASRD project?", period='endline', target = None)
+    os_p.add_breakdown({'locality':'locality'})
+    os_p.add_var_order(['Very low', "Low", "Moderate","High","Very high"])
+    indicators.append(os_p)
     return indicators
 
 # Extract the SRI scores by each category

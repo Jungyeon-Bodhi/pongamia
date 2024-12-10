@@ -329,6 +329,9 @@ class Preprocessing:
                print('New disability variable has not been created in this dataset')
                
     def poverty(self):
+        """
+        - To calculate % of displacement-affected persons living below the national poverty line
+        """
         df = self.df
         def assign_poverty_status(row):
             if row['4'] == 'Sudan':
@@ -344,11 +347,17 @@ class Preprocessing:
         self.df = df
         
     def decent_work(self):
+        """
+        - To calculate Outcome 2
+        """
         df = self.df
         df['decent_work'] = np.where((df['90'] == 'Yes') | (df['98'] == 'Yes'), 'Yes', 'No')
         self.df = df
 
     def sri_index(self):
+        """
+        - To calculate the Self-reliance Index score
+        """
         df = self.df
         condition1a = [
             (df['26'] == 'No shelter'),
@@ -459,6 +468,9 @@ class Preprocessing:
         self.df = df
 
     def output121(self):
+        """
+        - To calculate Output 1.2.1
+        """
         df = self.df
         
         source_conditions = ['Handpump or borehole', 'Protected shallow well', 'Protected dug well', 'Tube well', 'Tap stand']
@@ -522,6 +534,9 @@ class Preprocessing:
         self.df = df
 
     def output122(self):
+        """
+        - To calculate Output 1.2.2
+        """
         df = self.df
         conditions = ['Home latrine', 'Shared latrine', 'Communal latrine']
         df['latrine_usage'] = np.where(df['73'].isin(conditions), 1, 0)
@@ -541,6 +556,9 @@ class Preprocessing:
         self.df = df
   
     def output213(self):
+        """
+        - To calculate Output 2.1.3
+        """
         df = self.df
         
         for i in range(1, 15):
@@ -564,15 +582,21 @@ class Preprocessing:
         df['output_213'] = np.where((df['agri_increased'] == 'Increased') | (df['agri_diversified'] == 'Diversified'),'Increased/Diversified','No changes')
 
     def output214(self):
+        """
+        - To calculate Output 2.1.4
+        """
         df = self.df
         df['output_214'] = np.where(
         (df['4'] == 'South Sudan') & ((df[['111', '112']].mean(axis=1)) > 45875), 'Increased', 
         np.where((df['4'] == 'Sudan') & ((df[['111', '112']].mean(axis=1)) > 40000), 'Increased', 'Not increased'))
         self.df = df
         
-    def output215(self):
+    def outcome1_1(self):
+        """
+        - To calculate Outcome 1.1
+        """
         df = self.df
-        df['output_215'] = np.where((df['output_122'] == 'Improved') | (df['output_121'] == 'Improved'),'Increased','Not increased')
+        df['outcome_1_1'] = np.where((df['output_122'] == 'Improved') | (df['output_121'] == 'Improved'),'Increased','Not increased')
         self.df = df
         
     def region_location(self):
@@ -609,8 +633,9 @@ class Preprocessing:
         6. Drop unnecessary columns
         7. Handle missing values
         8. Extract answers from open-ended questions
-        9. Create age and disability groups
-        10. Save the cleaned dataset
+        9. Calculate indicators and unify some responses
+        10. Create age and disability groups
+        11. Save the cleaned dataset
         """
         self.data_load()
         self.columns_redefine()
@@ -632,7 +657,7 @@ class Preprocessing:
         self.output122()
         self.output213()
         self.output214()     
-        self.output215()     
+        self.outcome1_1()     
         if self.age_col != None:
             self.age_group()
         if self.diss_cols != None:
